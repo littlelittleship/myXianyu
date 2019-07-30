@@ -1,10 +1,27 @@
 <template>
   <div>
+    <!-- 头部组件 -->
+    <Header/>
     <nuxt />
+    <Footer/>
+
   </div>
 </template>
 
+<script>
+import Header from "@/components/header.vue"
+import Footer from "@/components/footer.vue"
+export default {
+  // 注册组件
+  components: {
+    Header,
+    Footer
+  }
+}
+</script>
+
 <style>
+/*  注意这里是公共样式，不用加scope，scope是用来处理组件冲突的，公共样式不加，加了服务器gg  */
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -15,41 +32,19 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+} 
+*{
+  margin:0;
+  padding:0
 }
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
+ul,ol,li{
+  list-style: none
 }
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
+a{
   text-decoration: none;
-  padding: 10px 30px;
+  color:inherit
 }
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+em,i{
+  font-style: normal
 }
 </style>
