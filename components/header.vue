@@ -17,19 +17,19 @@
             </el-row>
 
             <!-- 登录部分 -->
-            <div v-if="false">
+            <div v-if="!this.$store.state.user.userInfo.token">
                 <nuxt-link to='/user/login'>登录/注册</nuxt-link>
             </div>
             <div v-else>
                 <el-dropdown>
                     <span class="el-dropdown-link">
                         <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" alt="">
-                        回眸一笑下scar人
+                        {{this.$store.state.user.userInfo.user.nickname}}
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item>个人中心</el-dropdown-item>
-                        <el-dropdown-item>退出</el-dropdown-item>
+                        <el-dropdown-item @click.native="handLoginOut">退出</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
@@ -39,6 +39,15 @@
 
 <script>
 export default {
+    mounted() {
+        // console.log(this.$store.state)
+       
+    },
+    methods:{
+        handLoginOut() {
+            this.$store.commit('user/clearUserInfo')
+        }
+    }
 
 }
 </script>

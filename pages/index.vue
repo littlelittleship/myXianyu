@@ -67,7 +67,7 @@ export default {
       input:'',
       options: [      // 搜索框tab选项
         {
-            name: "攻略", 
+          name: "攻略", 
           placeholder: "搜索城市", 
           pageUrl: "/post?city="
         },
@@ -108,7 +108,7 @@ export default {
       url:'/scenics/banners'
     })
     .then( res =>{
-      console.log(res)
+      // console.log(res)
       let { data } = res.data
       this.banner = data
     })
