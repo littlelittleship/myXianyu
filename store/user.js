@@ -1,4 +1,5 @@
 export const state = () => ({
+    // 有用return的，表示返回一个对象
     userInfo: {
         token: "",
         user: {

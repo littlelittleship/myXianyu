@@ -113,7 +113,7 @@ export default {
       this.banner = data
     })
     .catch( error =>{
-      console.log(error)
+      // console.log(error)
     })
   }
 }

@@ -65,7 +65,7 @@ export default {
                     method:'POST',
                     data:props
                 }).then(res=>{
-                    console.log(res)
+                    // console.log(res)
                     this.$store.commit('user/setUserInfo',res.data)
                     this.$router.push('/')
                 })
