@@ -190,6 +190,14 @@ export default {
                 return 
             }
             
+            // 记录跳转信息
+            const arr = [...this.$store.state.air.history]
+            arr.unshift(this.form)
+            if(arr.length > 5){
+                arr.length =5
+            }
+            this.$store.commit('air/setHistory',arr)
+
             // 都满足跳转,拼接字符串的跳转方法
             this.$router.push({
                 path:'/air/flights',

@@ -3,41 +3,43 @@
         <el-row type="flex" class="filters-top" justify="space-between" align="middle">
             <el-col :span="8">
                 单程： 
-                广州 - 上海 
+                {{data.info.departCity}} - {{data.info.destCity}} 
                 / 
-                2019-06-17
+                {{data.info.departDate}}
             </el-col>
             <el-col :span="4">
                 <el-select size="mini" v-model="airport" placeholder="起飞机场" @change="handleAirport">
                     <el-option
-                    label="白云机场"
-                    value="白云机场"
-                    >
+                    :label="item"
+                    :value="item"
+                    v-for="(item,index) in data.options.airport" :key="index">
                     </el-option>
                 </el-select>
             </el-col>
             <el-col :span="4">
                 <el-select size="mini" v-model="flightTimes"  placeholder="起飞时间" @change="handleFlightTimes">
                     <el-option
-                    label="00:00 - 06:00"
-                    value="1"
-                    >
+                    :label="`${item.from}:00-${item.to}:00`"
+                    :value="`${item.from},${item.to}`"
+                    v-for="(item,index) in data.options.flightTimes" :key="index">
                     </el-option>
                 </el-select>
             </el-col>
             <el-col :span="4">
                 <el-select size="mini" v-model="company"  placeholder="航空公司" @change="handleCompany">
                     <el-option
-                    label="厦门航空"
-                    value="厦门航空">
+                    :label="item"
+                    :value="item"
+                    v-for="(item,index) in data.options.company" :key="index">
                     </el-option>
                 </el-select>
             </el-col>
             <el-col :span="4">
                 <el-select size="mini" v-model="airSize" placeholder="机型" @change="handleAirSize">
                     <el-option
-                    label="大"
-                    value="大">
+                    :label="item.name"
+                    :value="item.value"
+                    v-for="(item,index) in optionSize" :key="index">
                     </el-option>
                 </el-select>
             </el-col>
@@ -58,38 +60,67 @@
 
 <script>
 export default {
+    props:{
+        data:{
+            type:Object,
+            default:{}
+        }
+    },
     data(){
         return {
             airport: "",        // 机场
             flightTimes: "",    // 出发时间
             company: "",        // 航空公司
-            airSize: "",        // 机型大小
+            airSize: '',        // 机型大小
+            optionSize: [
+                {name:"大",value:"L"},
+                {name:"中",value:"M"},
+                {name:"小",value:"S"}
+            ],  //自定义的数组对象，用于选择机型
         }
     },
     methods: {
         // 选择机场时候触发
         handleAirport(value){
-            
+            const arr = this.data.flights.filter(v=> {
+                return v.org_airport_name === value
+            })
+            this.$emit('setDataList',arr)
         },
 
         // 选择出发时间时候触发
         handleFlightTimes(value){
-            
+            const [from,to] = value.split(',')  // value时：0，6 的字符串，变成数组，解构
+            const arr = this.data.flights.filter( v=>{
+                const start = +v.dep_time.split(":")[0]   // 拿到出发时间，字符串，转化成数字
+                return start >= from  &&  start < to
+            })
+            this.$emit('setDataList',arr)
         },
 
          // 选择航空公司时候触发
         handleCompany(value){
-            
+            const arr = this.data.flights.filter( v=>{
+               return v.airline_name === value
+            })
+            this.$emit('setDataList',arr)
         },
 
          // 选择机型时候触发
         handleAirSize(value){
-           
+           const arr = this.data.flights.filter( v=>{
+               return v.plane_size === value
+           })
+           this.$emit('setDataList',arr)
         },
         
         // 撤销条件时候触发
         handleFiltersCancel(){
-            
+            this.airport = ''
+            this.flightTimes = ''
+            this.company=''
+            this.airSize = ""
+            this.$emit('setDataList',this.data.flights)
         },
     }
 }

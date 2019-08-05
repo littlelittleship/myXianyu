@@ -6,7 +6,8 @@
             <div class="flights-content">
                 <!-- 过滤条件 -->
                 <div>
-                    <FlightsFiters/>
+                    <FlightsFiters :data="cacheFlightsData"
+                    @setDataList="setDataList"/>
                 </div>
                 
                 <!-- 航班头部布局 -->
@@ -38,6 +39,7 @@
             <!-- 侧边栏 -->
             <div class="aside">
                 <!-- 侧边栏组件 -->
+                <FlightsAside/>
             </div>
         </el-row>
     </section>
@@ -47,16 +49,27 @@
 import FlightsListHead from '@/components/air/flightsListHead'
 import FlightsItem from '@/components/air/flightsItem'
 import FlightsFiters from '@/components/air/flightsFilters'
+import FlightsAside from '@/components/air/flightsAside'
 export default {
     components:{
         FlightsListHead,
         FlightsItem,
-        FlightsFiters
+        FlightsFiters,
+        FlightsAside
     },
     data(){
         return {
             dataList:[],  //航班列表数据
-            flightsData:{},    //航班总数据，用户传递，是个对象
+            flightsData:{
+                flights:'',
+                info:'',
+                options:''
+            },    //航班总数据，用户传递，是个对象
+            cacheFlightsData:{
+                flights:'',
+                info:'',
+                options:''
+            },   // 缓存一份总数据
             data:{},
             pagenum:1,
             pagesize:2,
@@ -73,6 +86,7 @@ export default {
                 console.log(res)
                 this.dataList = res.data.flights
                 this.flightsData = res.data
+                this.cacheFlightsData = {...res.data}
                 this.total = res.data.total
                 this.showArr()
             })        
@@ -91,11 +105,25 @@ export default {
         // 显示数组的方法
         showArr(){
             this.newData = this.dataList.slice((this.pagenum-1)*this.pagesize,this.pagenum*this.pagesize)
+        },
+        // 设置新数组,arr时传过来的符合条件的新数组
+        setDataList(arr){
+            if(arr){
+                this.pagenum = 1;
+                this.dataList = arr
+                this.total = arr.length
+            }
+            this.showArr()
         }
     },
     mounted() {
         this.getData()
         this.showArr()
+    },
+    watch: {           //watch能监听$route参数的变化，一旦变化，重新请求数据
+        $route() {
+            this.getData()
+        }
     }
 }
 </script>
