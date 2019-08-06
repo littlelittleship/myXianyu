@@ -46,7 +46,10 @@ export default {
                         // console.log(res)
                         // 将参数保存到store中
                         this.$store.commit("user/setUserInfo",res.data)
-                        this.$router.push('/')
+                        // this.$router.push('/')
+                        //表示跳转到上一个页面，如果是第一次登陆，就到首页，如果是订单页过来的，回上一页，没毛病
+                        //主要用到axios里面的stateCode判断，rediret重定向，this.$router.back回到上一页，优化
+                        this.$router.back()
                     })
                 }
             })
